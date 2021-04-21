@@ -8,6 +8,7 @@ __pycache__/
 
 # Docker Attachments
 data
+redis
 
 # C extensions
 *.so
