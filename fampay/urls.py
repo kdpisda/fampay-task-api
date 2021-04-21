@@ -15,9 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from core import views as core_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('videos/', core_views.ListVideoViewSet.as_view({'get': 'list'})),
 ]
+
+urlpatterns += staticfiles_urlpatterns()
+
+admin.site.site_header = "FamPay Admin"
+admin.site.site_title = "FamPay Admin Portal"
+admin.site.index_title = "Welcome to FamPay Portal"

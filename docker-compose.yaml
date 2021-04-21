@@ -1,0 +1,54 @@
+version: "3.7"
+services:
+  api:
+    container_name: api
+    ports:
+      - "5000:5000"
+    image: fampay/api:v0.1
+    env_file:
+      - .env
+    restart: always
+    depends_on:
+      - db
+      - redis
+    entrypoint: "gunicorn -c gunicorn_config.py fampay.wsgi --bind 0.0.0.0:5000"
+
+  beat:
+    container_name: beat
+    image: fampay/api:v0.1
+    env_file:
+      - .env
+    restart: always
+    depends_on:
+      - db
+      - redis
+    entrypoint: "celery -A fampay beat -l info"
+
+  worker:
+    container_name: worker
+    image: fampay/api:v0.1
+    env_file:
+      - .env
+    restart: always
+    depends_on:
+      - db
+      - redis
+    entrypoint: "celery -A fampay worker -l info"
+
+  db:
+    container_name: db
+    image: "postgres"
+    env_file:
+      - .env
+    volumes:
+      - ./data/postgres/:/var/lib/postgresql/data/
+
+  redis:
+    container_name: redis
+    hostname: redis
+    image: redis:6.0.3
+    restart: always
+    command: ["redis-server", "--bind", "redis", "--port", "6379"]
+    volumes:
+      - ./data:/data
+      - ./redis:/var/lib/redis

@@ -6,6 +6,9 @@ __pycache__/
 # ENV files
 .env
 
+# Docker Attachments
+data
+
 # C extensions
 *.so
 
