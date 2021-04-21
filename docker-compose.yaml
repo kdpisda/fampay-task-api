@@ -11,6 +11,7 @@ services:
     depends_on:
       - db
       - redis
+    command: "python manage.py migrate"
     entrypoint: "gunicorn -c gunicorn_config.py fampay.wsgi --bind 0.0.0.0:5000"
 
   beat:
