@@ -22,6 +22,8 @@ class ListVideoViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         sort_order_req = request.GET.get('order')
         if sort_order_req is None or sort_order_req is "" or (sort_order_req != "DESC" and sort_order_req != "ASC"):
             sort_order = '-published_at'
+        elif sort_order_req == "DESC":
+            sort_order = '-published_at'
         else:
             sort_order = 'published_at'
 
