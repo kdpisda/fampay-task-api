@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import os
 from pathlib import Path
+from celery.schedules import crontab
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,12 +29,21 @@ DEBUG = not eval(os.getenv("PROD_MODE", "True"))
 
 ALLOWED_HOSTS = []
 
+SEARCH_KEYWORD = os.getenv('SEARCH_KEYWORD', 'corona')
+
 # Celery Options
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
 CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
 CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
+
+CELERY_BEAT_SCHEDULE = {
+    'update-database': {
+        'task': 'core.tasks.update_database',
+        'schedule': crontab(minute='*/2', hour='*')
+    }
+}
 
 # Application definition
 
